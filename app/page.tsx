@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Code2,
   Terminal as TerminalIcon,
@@ -14,10 +14,11 @@ import {
   Layers,
   Cpu,
   Mail,
-  Zap,
+  Calculator,
   Sliders,
   Send,
-  Sparkles
+  Sparkles,
+  TrendingUp
 } from 'lucide-react';
 
 // Contact Data
@@ -31,46 +32,80 @@ const CONTACT_DATA = {
   linkedin: 'https://linkedin.com',
 };
 
-// Skills Data
+// Skills Matrix
 const SKILLS = [
   {
-    category: 'Frontend Architecture',
+    category: 'Full-Stack & AI Integration',
     icon: Layers,
-    items: ['React / Next.js 14', 'TypeScript', 'Tailwind CSS', 'State Machines (Zustand)', 'WebSockets / SSR', 'WAI-ARIA Accessibility']
+    items: [
+      'Next.js 14 / React',
+      'TypeScript & JavaScript',
+      'Gemini Flash API & Prompt Design',
+      'Tailwind CSS UI Systems',
+      'State Management & Reactive Forms',
+      'Responsive Mobile-First Architecture'
+    ]
   },
   {
-    category: 'Backend & APIs',
+    category: 'Backend, APIs & Logistics Logic',
     icon: Database,
-    items: ['Node.js / Express', 'PostgreSQL / Prisma', 'Redis Caching', 'REST & GraphQL', 'OAuth / Auth0 / JWT', 'Microservices']
+    items: [
+      'Node.js RESTful API Endpoints',
+      'Courier & Shipping Comparative Algorithms',
+      'Razorpay Payment Gateway Integration',
+      'Dynamic Financial & Margin Modeling',
+      'Database Modeling & PostgreSQL',
+      'Input Validation & Sanitization'
+    ]
   },
   {
-    category: 'Cloud, Automation & DevOps',
+    category: 'E-Commerce, Cloud & Deployment',
     icon: Cloud,
-    items: ['Docker & Containerization', 'AWS (S3, Lambda, ECS)', 'CI/CD (GitHub Actions)', 'Workflow Automation (n8n/Webhooks)', 'Linux Sysadmin', 'Monitoring & Tracing']
+    items: [
+      'Vercel Edge Deployments & CI/CD',
+      'Git & GitHub Team Workflows',
+      'Marketplace Operations (Amazon / Meesho)',
+      'Web Performance & Core Web Vitals (95+)',
+      'Automated Order Workflow Pipelines',
+      'SEO & OpenGraph Configuration'
+    ]
   }
 ];
 
-// Project Case Studies
+// Real Live Projects
 const CASE_STUDIES = [
   {
-    title: 'NexusFlow Engine',
-    subtitle: 'Distributed Async Workflow & Webhook Orchestrator',
-    problem: 'Clients faced dropped webhooks and concurrency race conditions handling 2M+ incoming payload events daily across multi-tenant integrations.',
-    solution: 'Engineered a resilient queue processing pipeline with distributed locking, dead-letter retries, and sub-40ms execution monitoring.',
-    stack: ['Next.js', 'Node.js', 'Redis Queue', 'PostgreSQL', 'Docker'],
-    metrics: ['99.98% Deliverability', '3.8x Latency Reduction', '0 Data Drops'],
-    liveUrl: '#',
-    codeUrl: '#'
+    title: 'BizNavigator',
+    subtitle: 'AI-Powered Business Feasibility & Monetization Platform',
+    problem:
+      'Founders and aspiring entrepreneurs struggle to quickly evaluate business feasibility, calculate unit economics, and obtain structured operational execution checklists.',
+    solution:
+      'Architected a full-stack platform leveraging the Gemini Flash API to produce dynamic multi-tier business roadmaps, instant unit-margin formulas, and integrated Razorpay monetization.',
+    stack: ['Next.js', 'TypeScript', 'Gemini Flash API', 'Tailwind CSS', 'Razorpay', 'Vercel'],
+    metrics: ['Sub-2s Roadmap Synthesis', 'Razorpay Integrated', 'Dynamic Margin Engine'],
+    liveUrl: 'https://biz-navigatore.vercel.app/'
   },
   {
-    title: 'PulseMetrics Analytics',
-    subtitle: 'Zero-Latency Edge Real-Time Analytics Dashboard',
-    problem: 'Traditional client-side tracking packages inflated bundle footprints by 140kB and severely degraded Core Web Vitals (LCP/CLS).',
-    solution: 'Designed an ultra-lightweight (<2.1kB) client telemetry script paired with serverless edge consumers streaming updates to a live canvas UI.',
-    stack: ['TypeScript', 'Tailwind CSS', 'Cloudflare Workers', 'ClickHouse', 'Chart.js'],
-    metrics: ['100 Lighthouse Perf', '<15ms Edge Processing', 'Real-time WebSockets'],
-    liveUrl: '#',
-    codeUrl: '#'
+    title: 'LogiCompare',
+    subtitle: 'Intelligent Courier & Shipping Margin Comparative Tool',
+    problem:
+      'Online sellers and logistics coordinators spend hours manually cross-referencing zone-based freight rates, courier weight slabs, and delivery SLAs across disparate carriers.',
+    solution:
+      'Designed an automated logistics rate calculator that aggregates dimensional freight formulas and rate cards, allowing merchants to identify the highest-margin delivery partner instantly.',
+    stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Logistics Rate Matrix', 'Vercel'],
+    metrics: ['Instant Slab Breakdown', 'Zone-based Rate Comparison', '100% Mobile Optimized'],
+    liveUrl: 'https://logicompare.vercel.app/'
+  },
+  {
+    title: 'Forte Institute Meerut Portal',
+    subtitle: 'Modern Institutional Campus & Academic Web Application',
+    problem:
+      'Conventional college portals suffer from outdated interfaces, sluggish mobile response times, and fragmented campus access points for students and faculty.',
+    solution:
+      'Built a fast, modern institutional web application for Forte Institute of Technology featuring streamlined mobile navigation, department directory architectures, and event hubs.',
+    stack: ['Next.js', 'React', 'Tailwind CSS', 'Accessible UI', 'Vercel Edge'],
+    metrics: ['Sub-second First Contentful Paint', 'High Mobile Accessibility', 'Zero Layout Shifts'],
+    liveUrl: 'https://forte-institute-meerut-y62f.vercel.app/'
   }
 ];
 
@@ -78,20 +113,33 @@ export default function PortfolioPage() {
   const [copied, setCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Terminal interactive state
+  // Terminal state
   const [terminalInput, setTerminalInput] = useState('');
   const [terminalLogs, setTerminalLogs] = useState<Array<{ cmd: string; output: string }>>([
-    { cmd: 'yash --version', output: 'v3.4.0 (production-ready-release)' },
-    { cmd: 'yash --status', output: 'Available for high-impact contracts & full-stack roles' },
-    { cmd: 'help', output: 'Available commands: about, skills, contact, clear' }
+    { cmd: 'yash --version', output: 'v3.5.0 (verified-production-build)' },
+    { cmd: 'yash --live-apps', output: 'BizNavigator | LogiCompare | Forte Institute Portal' },
+    { cmd: 'help', output: 'Commands: about, projects, skills, contact, clear' }
   ]);
 
-  // Interactive Sandbox Playground state
-  const [rateLimitRate, setRateLimitRate] = useState(15);
-  const [burstCount, setBurstCount] = useState(0);
-  const [isThrottled, setIsThrottled] = useState(false);
+  // Live Unit Economics Playground
+  const [sellingPrice, setSellingPrice] = useState(999);
+  const [productCost, setProductCost] = useState(380);
+  const [shippingFee, setShippingFee] = useState(85);
+  const [gatewayCutPercent, setGatewayCutPercent] = useState(2);
 
-  // Copy to clipboard helper
+  const calculations = useMemo(() => {
+    const gatewayFee = (sellingPrice * gatewayCutPercent) / 100;
+    const totalExpenses = productCost + shippingFee + gatewayFee;
+    const netProfit = sellingPrice - totalExpenses;
+    const profitMargin = sellingPrice > 0 ? ((netProfit / sellingPrice) * 100).toFixed(1) : '0';
+    return {
+      gatewayFee: gatewayFee.toFixed(1),
+      totalExpenses: totalExpenses.toFixed(1),
+      netProfit: netProfit.toFixed(1),
+      profitMargin
+    };
+  }, [sellingPrice, productCost, shippingFee, gatewayCutPercent]);
+
   const handleCopyEmail = async () => {
     try {
       await navigator.clipboard.writeText(CONTACT_DATA.email);
@@ -100,11 +148,10 @@ export default function PortfolioPage() {
       setTimeout(() => setCopied(false), 2500);
       setTimeout(() => setToastMessage(null), 3000);
     } catch {
-      setToastMessage('Failed to copy. Please manually copy: ' + CONTACT_DATA.email);
+      setToastMessage('Please manually copy: ' + CONTACT_DATA.email);
     }
   };
 
-  // Terminal command execution
   const handleTerminalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanCmd = terminalInput.trim().toLowerCase();
@@ -113,16 +160,19 @@ export default function PortfolioPage() {
     let response = '';
     switch (cleanCmd) {
       case 'help':
-        response = 'Commands: about, skills, contact, clear';
+        response = 'Commands: about, projects, skills, contact, clear';
         break;
       case 'about':
-        response = 'Yash Chaudhary — Full-stack engineer crafting high-performance web applications and scalable automation.';
+        response = 'Yash Chaudhary — Full-stack developer building practical AI apps, logistics comparative engines, and modern web apps.';
+        break;
+      case 'projects':
+        response = '1. biz-navigatore.vercel.app | 2. logicompare.vercel.app | 3. forte-institute-meerut-y62f.vercel.app';
         break;
       case 'skills':
-        response = 'Frontend (React, Next.js, TS), Backend (Node, Postgres, Redis), DevOps (Docker, AWS, CI/CD).';
+        response = 'Next.js, TypeScript, React, Tailwind CSS, Gemini Flash API, Razorpay, Logistics Logic, Node.js';
         break;
       case 'contact':
-        response = `Email: ${CONTACT_DATA.email} | Phone/WA: ${CONTACT_DATA.phoneFormatted}`;
+        response = `Email: ${CONTACT_DATA.email} | WhatsApp: ${CONTACT_DATA.phoneFormatted}`;
         break;
       case 'clear':
         setTerminalLogs([]);
@@ -136,32 +186,11 @@ export default function PortfolioPage() {
     setTerminalInput('');
   };
 
-  // Interactive Sandbox trigger
-  const triggerSandboxAction = () => {
-    if (burstCount >= rateLimitRate) {
-      setIsThrottled(true);
-      return;
-    }
-    setBurstCount((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (burstCount > 0) {
-      const timer = setTimeout(() => {
-        setBurstCount((prev) => Math.max(0, prev - 1));
-        if (burstCount - 1 < rateLimitRate) {
-          setIsThrottled(false);
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [burstCount, rateLimitRate]);
-
   return (
     <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] antialiased selection:bg-blue-600/30 selection:text-blue-200">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border border-border bg-[#18181b] px-4 py-3 text-sm text-white shadow-2xl backdrop-blur transition-all">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#18181b] px-4 py-3 text-sm text-white shadow-2xl backdrop-blur transition-all">
           <Check className="h-4 w-4 text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
@@ -179,9 +208,9 @@ export default function PortfolioPage() {
           </a>
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-mono uppercase tracking-wider text-zinc-400">
-            <a href="#projects" className="hover:text-white transition">Projects</a>
-            <a href="#sandbox" className="hover:text-white transition">Sandbox</a>
-            <a href="#skills" className="hover:text-white transition">Skills Matrix</a>
+            <a href="#projects" className="hover:text-white transition">Live Works</a>
+            <a href="#sandbox" className="hover:text-white transition">Economics Engine</a>
+            <a href="#skills" className="hover:text-white transition">Stack</a>
             <a href="#contact" className="hover:text-white transition">Contact</a>
           </nav>
 
@@ -207,16 +236,16 @@ export default function PortfolioPage() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
             </span>
-            Available for select contracts & full-stack roles
+            Available for select full-stack builds & freelance projects
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
-                Full-Stack Engineer crafting <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">high-performance</span> digital engines.
+                Full-Stack Engineer building <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">verified production software</span> & tools.
               </h1>
               <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-2xl mb-8">
-                I am <span className="text-white font-medium">{CONTACT_DATA.name}</span>. I architect resilient web architectures, zero-latency APIs, and robust workflow automations that transform technical complexity into streamlined business software.
+                I am <span className="text-white font-medium">{CONTACT_DATA.name}</span>. I build production-grade web applications, automated business calculators, logistics comparative systems, and AI-powered operational tools.
               </p>
 
               {/* CTAs */}
@@ -243,16 +272,15 @@ export default function PortfolioPage() {
                   href="#projects"
                   className="inline-flex items-center gap-1.5 rounded-md px-4 py-2.5 text-sm text-zinc-400 hover:text-white transition"
                 >
-                  <span>Explore Work</span>
+                  <span>Explore Live Projects</span>
                   <ArrowUpRight className="h-4 w-4" />
                 </a>
               </div>
             </div>
 
-            {/* Terminal Window / Interactive Element */}
+            {/* Terminal Window */}
             <div className="lg:col-span-5">
               <div className="overflow-hidden rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#0d1117] shadow-2xl font-mono text-xs">
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] bg-[#161b22] px-4 py-2.5">
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-red-500/80"></div>
@@ -263,9 +291,8 @@ export default function PortfolioPage() {
                   <TerminalIcon className="h-3.5 w-3.5 text-zinc-500" />
                 </div>
 
-                {/* Body */}
                 <div className="p-4 h-64 overflow-y-auto space-y-3">
-                  <div className="text-zinc-500">// Type &apos;help&apos;, &apos;skills&apos;, or &apos;about&apos; below</div>
+                  <div className="text-zinc-500">// Type &apos;help&apos;, &apos;projects&apos;, or &apos;about&apos;</div>
                   {terminalLogs.map((log, index) => (
                     <div key={index} className="space-y-1">
                       <div className="flex items-center gap-2 text-blue-400">
@@ -292,62 +319,65 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* ================= PROJECT CASE STUDIES ================= */}
+        {/* ================= PROJECT CASE STUDIES (ALL 3 LIVE APPS) ================= */}
         <section id="projects" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Engineering Portfolio</span>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Featured Case Studies</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Production Deployments</span>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Live Applications & Case Studies</h2>
             </div>
-            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Proof of architecture & measurable impact</p>
+            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Direct proof of execution & verified URLs</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {CASE_STUDIES.map((project, idx) => (
               <div
                 key={idx}
-                className="group relative flex flex-col justify-between rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 md:p-8 hover:border-zinc-700 transition duration-300"
+                className="group relative flex flex-col justify-between rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 hover:border-zinc-700 transition duration-300"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition">
                       {project.title}
                     </h3>
-                    <div className="flex gap-2">
-                      <a href={project.liveUrl} className="rounded p-1.5 text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 rounded bg-zinc-900 border border-zinc-800 px-2 py-1 text-xs font-mono text-blue-400 hover:text-white hover:border-blue-500 transition"
+                      title="Open Live App"
+                    >
+                      <span>Live App</span>
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+
+                  <p className="text-xs font-medium text-zinc-300 mb-4">{project.subtitle}</p>
+
+                  <div className="space-y-3 mb-6 text-xs text-zinc-400">
+                    <div>
+                      <strong className="text-zinc-200 font-mono text-[11px] uppercase tracking-wider block mb-1">Problem Addressed:</strong>
+                      <p className="leading-relaxed">{project.problem}</p>
+                    </div>
+                    <div>
+                      <strong className="text-zinc-200 font-mono text-[11px] uppercase tracking-wider block mb-1">Architecture & Solution:</strong>
+                      <p className="leading-relaxed">{project.solution}</p>
                     </div>
                   </div>
 
-                  <p className="text-sm font-medium text-zinc-300 mb-4">{project.subtitle}</p>
-
-                  <div className="space-y-3 mb-6 text-sm text-zinc-400">
-                    <div>
-                      <strong className="text-zinc-200 font-mono text-xs uppercase tracking-wider block mb-1">Problem Statement:</strong>
-                      <p className="text-xs leading-relaxed">{project.problem}</p>
-                    </div>
-                    <div>
-                      <strong className="text-zinc-200 font-mono text-xs uppercase tracking-wider block mb-1">Architecture & Solution:</strong>
-                      <p className="text-xs leading-relaxed">{project.solution}</p>
-                    </div>
-                  </div>
-
-                  {/* Metrics Badge Row */}
-                  <div className="flex flex-wrap gap-2 mb-6">
+                  <div className="flex flex-wrap gap-1.5 mb-6">
                     {project.metrics.map((metric, mIdx) => (
-                      <span key={mIdx} className="inline-flex items-center gap-1 rounded border border-emerald-500/20 bg-emerald-950/20 px-2.5 py-1 text-xs font-mono text-emerald-400">
-                        <Sparkles className="h-3 w-3" />
+                      <span key={mIdx} className="inline-flex items-center gap-1 rounded border border-emerald-500/20 bg-emerald-950/20 px-2 py-0.5 text-[11px] font-mono text-emerald-400">
+                        <Sparkles className="h-2.5 w-2.5" />
                         {metric}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                {/* Tech Stack Pills */}
-                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-[rgba(255,255,255,0.06)]">
+                <div className="flex flex-wrap gap-1 pt-4 border-t border-[rgba(255,255,255,0.06)]">
                   {project.stack.map((tech, tIdx) => (
-                    <span key={tIdx} className="rounded bg-zinc-900 px-2 py-0.5 text-[11px] font-mono text-zinc-400 border border-zinc-800">
+                    <span key={tIdx} className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-800">
                       {tech}
                     </span>
                   ))}
@@ -357,79 +387,108 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* ================= INTERACTIVE DEV SANDBOX ================= */}
+        {/* ================= INTERACTIVE COMPONENT PLAYGROUND ================= */}
         <section id="sandbox" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Interactive Execution</span>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Token-Bucket Rate Limiter Sandbox</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Interactive Logic Sandbox</span>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Real-Time Unit Economics Calculator</h2>
             </div>
-            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Real-time state & backpressure simulation</p>
+            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Live reactive module derived from BizNavigator</p>
           </div>
 
           <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/70 p-6 md:p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Controls */}
-              <div className="space-y-6">
+              <div className="lg:col-span-6 space-y-5">
                 <div>
                   <label className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
-                    <span className="flex items-center gap-1.5"><Sliders className="h-3.5 w-3.5 text-blue-400" /> Max Concurrency Ceiling</span>
-                    <span>{rateLimitRate} req/s</span>
+                    <span className="flex items-center gap-1.5"><Sliders className="h-3.5 w-3.5 text-blue-400" /> Target Retail Price (₹)</span>
+                    <span className="text-white font-bold">₹{sellingPrice}</span>
                   </label>
                   <input
                     type="range"
-                    min="5"
-                    max="30"
-                    value={rateLimitRate}
-                    onChange={(e) => setRateLimitRate(Number(e.target.value))}
+                    min="100"
+                    max="5000"
+                    step="50"
+                    value={sellingPrice}
+                    onChange={(e) => setSellingPrice(Number(e.target.value))}
                     className="w-full accent-blue-500 cursor-pointer"
                   />
                 </div>
 
                 <div>
-                  <button
-                    onClick={triggerSandboxAction}
-                    className="w-full flex items-center justify-center gap-2 rounded-md bg-blue-600/90 hover:bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition active:scale-[0.98]"
-                  >
-                    <Zap className="h-4 w-4" />
-                    <span>Dispatch Payload Pulse</span>
-                  </button>
-                  <p className="text-[11px] text-zinc-500 mt-2 font-mono">
-                    Click rapidly to trigger upstream backpressure & circuit breaking.
-                  </p>
+                  <label className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
+                    <span className="flex items-center gap-1.5"><Calculator className="h-3.5 w-3.5 text-blue-400" /> Landed Cost of Goods (COGS) (₹)</span>
+                    <span className="text-white font-bold">₹{productCost}</span>
+                  </label>
+                  <input
+                    type="range"
+                    min="50"
+                    max="3000"
+                    step="25"
+                    value={productCost}
+                    onChange={(e) => setProductCost(Number(e.target.value))}
+                    className="w-full accent-blue-500 cursor-pointer"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-400 mb-1.5">Shipping / Delivery (₹)</label>
+                    <input
+                      type="number"
+                      value={shippingFee}
+                      onChange={(e) => setShippingFee(Number(e.target.value))}
+                      className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3 py-2 text-sm text-white font-mono focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono text-zinc-400 mb-1.5">Payment Gateway Fee (%)</label>
+                    <input
+                      type="number"
+                      value={gatewayCutPercent}
+                      onChange={(e) => setGatewayCutPercent(Number(e.target.value))}
+                      className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3 py-2 text-sm text-white font-mono focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Real-time State Visualizer */}
-              <div className="lg:col-span-2 border border-[rgba(255,255,255,0.06)] rounded-lg bg-[#0d1117] p-5 font-mono">
-                <div className="flex items-center justify-between mb-4 border-b border-zinc-800 pb-3">
-                  <span className="text-xs text-zinc-400 uppercase">Memory State Monitor</span>
-                  <span className={`text-xs px-2 py-0.5 rounded font-mono ${isThrottled ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}`}>
-                    {isThrottled ? 'STATUS: 429 THROTTLED' : 'STATUS: 200 HEALTHY'}
-                  </span>
+              {/* Real-time Calculation Panel */}
+              <div className="lg:col-span-6 flex flex-col justify-between rounded-lg border border-zinc-800 bg-[#0d1117] p-6 font-mono">
+                <div>
+                  <div className="flex items-center justify-between pb-3 border-b border-zinc-800/80 mb-4 text-xs">
+                    <span className="text-zinc-400">Contribution Margin Health</span>
+                    <span className={`px-2 py-0.5 rounded text-xs ${Number(calculations.netProfit) >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                      {Number(calculations.netProfit) >= 0 ? 'NET POSITIVE' : 'DEFICIT MARGIN'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3 text-xs mb-6">
+                    <div className="flex justify-between text-zinc-400">
+                      <span>Gateway Surcharge (Razorpay/Cards):</span>
+                      <span className="text-zinc-200">₹{calculations.gatewayFee}</span>
+                    </div>
+                    <div className="flex justify-between text-zinc-400">
+                      <span>Combined Realized Overhead:</span>
+                      <span className="text-zinc-200">₹{calculations.totalExpenses}</span>
+                    </div>
+                    <div className="flex justify-between text-zinc-400 pt-2 border-t border-zinc-800">
+                      <span>Net Contribution Per Order:</span>
+                      <span className={`text-sm font-bold ${Number(calculations.netProfit) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        ₹{calculations.netProfit} ({calculations.profitMargin}%)
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-xs mb-1 text-zinc-400">
-                      <span>Queue Pressure Capacity</span>
-                      <span>{burstCount} / {rateLimitRate} in-flight</span>
-                    </div>
-                    <div className="h-3 w-full rounded-full bg-zinc-800 overflow-hidden">
-                      <div
-                        className={`h-full transition-all duration-300 ${burstCount >= rateLimitRate ? 'bg-red-500' : 'bg-blue-500'}`}
-                        style={{ width: `${Math.min(100, (burstCount / rateLimitRate) * 100)}%` }}
-                      ></div>
-                    </div>
+                <div className="rounded bg-black/60 p-3 text-[11px] space-y-1 text-zinc-300 border border-zinc-800/80">
+                  <div className="flex items-center gap-1.5 text-blue-400 mb-1">
+                    <TrendingUp className="h-3.5 w-3.5" />
+                    <span className="font-semibold">BizNavigator Financial Engine</span>
                   </div>
-
-                  <div className="rounded bg-black/60 p-3 text-[11px] space-y-1 text-zinc-300 border border-zinc-800/80">
-                    <div>{`{"timestamp": "${new Date().toISOString()}",`}</div>
-                    <div className="pl-4">{`"inFlightEvents": ${burstCount},`}</div>
-                    <div className="pl-4">{`"threshold": ${rateLimitRate},`}</div>
-                    <div className="pl-4 text-emerald-400">{`"evictionStrategy": "LeakyBucket-AsyncDrain"`}</div>
-                    <div>{`}`}</div>
-                  </div>
+                  <div>Net Profit = Retail - (COGS + Shipping + GatewayCut)</div>
                 </div>
               </div>
             </div>
@@ -439,7 +498,7 @@ export default function PortfolioPage() {
         {/* ================= SKILLS MATRIX ================= */}
         <section id="skills" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
           <div className="mb-12">
-            <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Domain Competence</span>
+            <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Domain Proficiency</span>
             <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Technical Stack & Capabilities</h2>
           </div>
 
@@ -473,13 +532,12 @@ export default function PortfolioPage() {
         <section id="contact" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-5">
-              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Initiate Dialogue</span>
-              <h2 className="text-3xl font-bold text-white mt-1 mb-4">Let&apos;s build something exceptional.</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Initiate Collaboration</span>
+              <h2 className="text-3xl font-bold text-white mt-1 mb-4">Let&apos;s build production software.</h2>
               <p className="text-sm text-zinc-400 leading-relaxed mb-6">
-                Whether you need a greenfield system built, an existing application scaled, or mission-critical workflows automated—reach out directly.
+                Whether you need a custom web application built, AI workflows embedded, or automated logistics & commerce tools, contact me directly.
               </p>
 
-              {/* Direct Channels */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3.5 rounded-lg border border-[rgba(255,255,255,0.08)] bg-zinc-900/50">
                   <div className="flex items-center gap-3">
@@ -491,7 +549,7 @@ export default function PortfolioPage() {
                     className="p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition"
                     title="Copy Email"
                   >
-                    {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+                    {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-zinc-400" />}
                   </button>
                 </div>
 
@@ -510,12 +568,12 @@ export default function PortfolioPage() {
               </div>
             </div>
 
-            {/* Structured Contact Form */}
+            {/* Contact Form */}
             <div className="lg:col-span-7">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  alert('Thank you for reaching out! Yash Chaudhary will review your message promptly.');
+                  alert('Thank you! Yash Chaudhary will review your message promptly.');
                 }}
                 className="space-y-4 rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 md:p-8"
               >
@@ -527,13 +585,13 @@ export default function PortfolioPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Alex Vance"
+                      placeholder="e.g. Ramesh Sharma"
                       className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none"
                     />
                   </div>
                   <div>
                     <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
-                      Contact Email or Phone
+                      Email or WhatsApp
                     </label>
                     <input
                       type="text"
@@ -546,18 +604,18 @@ export default function PortfolioPage() {
 
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
-                    Project Scope / Timeline
+                    Project Scope / Requirements
                   </label>
                   <textarea
                     rows={4}
                     required
-                    placeholder="Describe your technical requirements, goals, and target deadlines..."
+                    placeholder="Describe what you would like to build or automate..."
                     className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none resize-none"
                   ></textarea>
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs font-mono text-zinc-500">Average response time: &lt; 4 hours</span>
+                  <span className="text-xs font-mono text-zinc-500">Typical response time: &lt; 2 hours</span>
                   <button
                     type="submit"
                     className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-md hover:bg-blue-500 transition"
@@ -575,7 +633,7 @@ export default function PortfolioPage() {
             <div className="flex items-center gap-6">
               <a href={CONTACT_DATA.whatsappUrl} className="hover:text-zinc-300 transition">WhatsApp Direct</a>
               <a href={`mailto:${CONTACT_DATA.email}`} className="hover:text-zinc-300 transition">Direct Email</a>
-              <a href="#projects" className="hover:text-zinc-300 transition">Architectures</a>
+              <a href="#projects" className="hover:text-zinc-300 transition">Live Applications</a>
             </div>
           </footer>
         </section>

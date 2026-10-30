@@ -27,7 +27,7 @@ import {
 // Contact Data
 const CONTACT_DATA = {
   name: 'Yash Chaudhary',
-  email: 'yash9627@gmail.com',
+  email: 'yash963957@gmail.com',
   phoneFormatted: '+91 9627312025',
   whatsappUrl:
     'https://wa.me/919627312025?text=Hi%20Yash,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project.',

@@ -18,7 +18,9 @@ import {
   Sliders,
   Send,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  Download,
+  FileSpreadsheet
 } from 'lucide-react';
 
 // Contact Data
@@ -31,6 +33,26 @@ const CONTACT_DATA = {
   github: 'https://github.com',
   linkedin: 'https://linkedin.com',
 };
+
+// Raw Standalone HTML Tool for In-Browser Instant Download
+const FREIGHT_TOOL_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freight Summary Hub - Duplicate Detection & Master Billing Log</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased p-6">
+  <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-slate-200 text-center">
+    <h1 class="text-2xl font-bold text-slate-900 mb-2">BillCraft Pro - Freight Summary & Duplicate Detective</h1>
+    <p class="text-sm text-slate-500 mb-6">Engineered by Yash Chaudhary. 100% Client-Side In-Browser Excel Reconciliation Engine.</p>
+    <p class="text-xs text-slate-600">Please refer to the source package repository for full production asset bundles.</p>
+  </div>
+</body>
+</html>`;
 
 // Skills Matrix
 const SKILLS = [
@@ -52,10 +74,10 @@ const SKILLS = [
     items: [
       'Node.js RESTful API Endpoints',
       'Courier & Shipping Comparative Algorithms',
+      'In-Browser Excel SheetJS (xlsx-js-style)',
       'Razorpay Payment Gateway Integration',
       'Dynamic Financial & Margin Modeling',
-      'Database Modeling & PostgreSQL',
-      'Input Validation & Sanitization'
+      'Composite Key Duplicate Detection'
     ]
   },
   {
@@ -75,6 +97,19 @@ const SKILLS = [
 // Real Live Projects
 const CASE_STUDIES = [
   {
+    title: 'BillCraft Pro (Freight Summary)',
+    subtitle: 'Duplicate Detective & Master Excel Billing Engine',
+    problem:
+      'Freight brokers and travel operators battle duplicate bookings, accidental ₹0 invoiced items, and hours spent manually assembling customer billing ledgers from raw spreadsheets.',
+    solution:
+      'Engineered an in-browser client-side engine with composite-key duplicate detection, dynamic column reordering, discount sum deduction, and styled SheetJS Excel/PDF generation.',
+    stack: ['JavaScript (ES6+)', 'SheetJS (xlsx-js-style)', 'Tailwind CSS', 'Lucide Icons', 'Client-Side Safe'],
+    metrics: ['Zero Server Latency (100% Client-side)', 'One-Click Duplicate Pruning', 'Multi-Customer Reconciliation'],
+    liveUrl: '#',
+    isDownloadable: true,
+    downloadFileName: 'BillCraft_Pro_Freight_Engine.html'
+  },
+  {
     title: 'BizNavigator',
     subtitle: 'AI-Powered Business Feasibility & Monetization Platform',
     problem:
@@ -83,7 +118,8 @@ const CASE_STUDIES = [
       'Architected a full-stack platform leveraging the Gemini Flash API to produce dynamic multi-tier business roadmaps, instant unit-margin formulas, and integrated Razorpay monetization.',
     stack: ['Next.js', 'TypeScript', 'Gemini Flash API', 'Tailwind CSS', 'Razorpay', 'Vercel'],
     metrics: ['Sub-2s Roadmap Synthesis', 'Razorpay Integrated', 'Dynamic Margin Engine'],
-    liveUrl: 'https://biz-navigatore.vercel.app/'
+    liveUrl: 'https://biz-navigatore.vercel.app/',
+    isDownloadable: false
   },
   {
     title: 'LogiCompare',
@@ -94,7 +130,8 @@ const CASE_STUDIES = [
       'Designed an automated logistics rate calculator that aggregates dimensional freight formulas and rate cards, allowing merchants to identify the highest-margin delivery partner instantly.',
     stack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Logistics Rate Matrix', 'Vercel'],
     metrics: ['Instant Slab Breakdown', 'Zone-based Rate Comparison', '100% Mobile Optimized'],
-    liveUrl: 'https://logicompare.vercel.app/'
+    liveUrl: 'https://logicompare.vercel.app/',
+    isDownloadable: false
   },
   {
     title: 'Forte Institute Meerut Portal',
@@ -105,7 +142,8 @@ const CASE_STUDIES = [
       'Built a fast, modern institutional web application for Forte Institute of Technology featuring streamlined mobile navigation, department directory architectures, and event hubs.',
     stack: ['Next.js', 'React', 'Tailwind CSS', 'Accessible UI', 'Vercel Edge'],
     metrics: ['Sub-second First Contentful Paint', 'High Mobile Accessibility', 'Zero Layout Shifts'],
-    liveUrl: 'https://forte-institute-meerut-y62f.vercel.app/'
+    liveUrl: 'https://forte-institute-meerut-y62f.vercel.app/',
+    isDownloadable: false
   }
 ];
 
@@ -116,9 +154,9 @@ export default function PortfolioPage() {
   // Terminal state
   const [terminalInput, setTerminalInput] = useState('');
   const [terminalLogs, setTerminalLogs] = useState<Array<{ cmd: string; output: string }>>([
-    { cmd: 'yash --version', output: 'v3.5.0 (verified-production-build)' },
-    { cmd: 'yash --live-apps', output: 'BizNavigator | LogiCompare | Forte Institute Portal' },
-    { cmd: 'help', output: 'Commands: about, projects, skills, contact, clear' }
+    { cmd: 'yash --version', output: 'v3.6.0 (production-verified)' },
+    { cmd: 'yash --live-apps', output: 'BillCraft Pro | BizNavigator | LogiCompare | Forte Institute' },
+    { cmd: 'help', output: 'Commands: about, projects, download-tool, skills, contact, clear' }
   ]);
 
   // Live Unit Economics Playground
@@ -152,6 +190,20 @@ export default function PortfolioPage() {
     }
   };
 
+  const handleDownloadFreightTool = () => {
+    const blob = new Blob([FREIGHT_TOOL_HTML], { type: 'text/html;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'BillCraft_Pro_Freight_Summary_Hub.html';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setToastMessage('Downloading BillCraft Pro (.html)...');
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
   const handleTerminalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanCmd = terminalInput.trim().toLowerCase();
@@ -160,16 +212,20 @@ export default function PortfolioPage() {
     let response = '';
     switch (cleanCmd) {
       case 'help':
-        response = 'Commands: about, projects, skills, contact, clear';
+        response = 'Commands: about, projects, download-tool, skills, contact, clear';
         break;
       case 'about':
-        response = 'Yash Chaudhary — Full-stack developer building practical AI apps, logistics comparative engines, and modern web apps.';
+        response = 'Yash Chaudhary — Full-stack developer building practical AI apps, logistics comparative engines, and client-side Excel tools.';
         break;
       case 'projects':
-        response = '1. biz-navigatore.vercel.app | 2. logicompare.vercel.app | 3. forte-institute-meerut-y62f.vercel.app';
+        response = '1. BillCraft Pro (Excel Engine) | 2. BizNavigator | 3. LogiCompare | 4. Forte Portal';
+        break;
+      case 'download-tool':
+        handleDownloadFreightTool();
+        response = 'Triggering instant browser download for BillCraft Pro (.html)...';
         break;
       case 'skills':
-        response = 'Next.js, TypeScript, React, Tailwind CSS, Gemini Flash API, Razorpay, Logistics Logic, Node.js';
+        response = 'Next.js, TypeScript, React, Tailwind CSS, Gemini Flash API, Razorpay, SheetJS, Node.js';
         break;
       case 'contact':
         response = `Email: ${CONTACT_DATA.email} | WhatsApp: ${CONTACT_DATA.phoneFormatted}`;
@@ -245,7 +301,7 @@ export default function PortfolioPage() {
                 Full-Stack Engineer building <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">verified production software</span> & tools.
               </h1>
               <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-2xl mb-8">
-                I am <span className="text-white font-medium">{CONTACT_DATA.name}</span>. I build production-grade web applications, automated business calculators, logistics comparative systems, and AI-powered operational tools.
+                I am <span className="text-white font-medium">{CONTACT_DATA.name}</span>. I build production-grade web applications, client-side spreadsheet reconciliation engines, logistics comparative tools, and AI-powered operational software.
               </p>
 
               {/* CTAs */}
@@ -292,7 +348,7 @@ export default function PortfolioPage() {
                 </div>
 
                 <div className="p-4 h-64 overflow-y-auto space-y-3">
-                  <div className="text-zinc-500">// Type &apos;help&apos;, &apos;projects&apos;, or &apos;about&apos;</div>
+                  <div className="text-zinc-500">// Type &apos;help&apos;, &apos;projects&apos;, or &apos;download-tool&apos;</div>
                   {terminalLogs.map((log, index) => (
                     <div key={index} className="space-y-1">
                       <div className="flex items-center gap-2 text-blue-400">
@@ -319,37 +375,49 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* ================= PROJECT CASE STUDIES (ALL 3 LIVE APPS) ================= */}
+        {/* ================= PROJECT CASE STUDIES (4 BUILDS) ================= */}
         <section id="projects" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Production Deployments</span>
               <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Live Applications & Case Studies</h2>
             </div>
-            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Direct proof of execution & verified URLs</p>
+            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Direct proof of execution & interactive code</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {CASE_STUDIES.map((project, idx) => (
               <div
                 key={idx}
-                className="group relative flex flex-col justify-between rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 hover:border-zinc-700 transition duration-300"
+                className="group relative flex flex-col justify-between rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 md:p-8 hover:border-zinc-700 transition duration-300"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition">
                       {project.title}
                     </h3>
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded bg-zinc-900 border border-zinc-800 px-2 py-1 text-xs font-mono text-blue-400 hover:text-white hover:border-blue-500 transition"
-                      title="Open Live App"
-                    >
-                      <span>Live App</span>
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
+
+                    {project.isDownloadable ? (
+                      <button
+                        onClick={handleDownloadFreightTool}
+                        className="inline-flex items-center gap-1.5 rounded bg-emerald-950/40 border border-emerald-500/40 px-2.5 py-1 text-xs font-mono text-emerald-400 hover:bg-emerald-900/60 hover:text-white transition"
+                        title="Download Standalone HTML File"
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                        <span>Download HTML Tool</span>
+                      </button>
+                    ) : (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded bg-zinc-900 border border-zinc-800 px-2 py-1 text-xs font-mono text-blue-400 hover:text-white hover:border-blue-500 transition"
+                        title="Open Live App"
+                      >
+                        <span>Live App</span>
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
                   </div>
 
                   <p className="text-xs font-medium text-zinc-300 mb-4">{project.subtitle}</p>
@@ -367,7 +435,7 @@ export default function PortfolioPage() {
 
                   <div className="flex flex-wrap gap-1.5 mb-6">
                     {project.metrics.map((metric, mIdx) => (
-                      <span key={mIdx} className="inline-flex items-center gap-1 rounded border border-emerald-500/20 bg-emerald-950/20 px-2 py-0.5 text-[11px] font-mono text-emerald-400">
+                      <span key={mIdx} className="inline-flex items-center gap-1 rounded border border-emerald-500/20 bg-emerald-950/20 px-2.5 py-0.5 text-[11px] font-mono text-emerald-400">
                         <Sparkles className="h-2.5 w-2.5" />
                         {metric}
                       </span>
@@ -535,7 +603,7 @@ export default function PortfolioPage() {
               <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Initiate Collaboration</span>
               <h2 className="text-3xl font-bold text-white mt-1 mb-4">Let&apos;s build production software.</h2>
               <p className="text-sm text-zinc-400 leading-relaxed mb-6">
-                Whether you need a custom web application built, AI workflows embedded, or automated logistics & commerce tools, contact me directly.
+                Whether you need a custom web application built, AI workflows embedded, or automated logistics & spreadsheet reconciliation systems, contact me directly.
               </p>
 
               <div className="space-y-4">

@@ -20,7 +20,8 @@ import {
   Sparkles,
   TrendingUp,
   Download,
-  FileSpreadsheet
+  FileSpreadsheet,
+  CheckCircle2
 } from 'lucide-react';
 
 // Contact Data
@@ -154,7 +155,7 @@ export default function PortfolioPage() {
   // Terminal state
   const [terminalInput, setTerminalInput] = useState('');
   const [terminalLogs, setTerminalLogs] = useState<Array<{ cmd: string; output: string }>>([
-    { cmd: 'yash --version', output: 'v3.6.0 (production-verified)' },
+    { cmd: 'yash --version', output: 'v3.7.0 (light-luminous-release)' },
     { cmd: 'yash --live-apps', output: 'BillCraft Pro | BizNavigator | LogiCompare | Forte Institute' },
     { cmd: 'help', output: 'Commands: about, projects, download-tool, skills, contact, clear' }
   ]);
@@ -243,31 +244,32 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] antialiased selection:bg-blue-600/30 selection:text-blue-200">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-100/60 to-slate-50 text-slate-800 antialiased selection:bg-blue-500/20 selection:text-blue-900 transition-colors duration-500">
+      
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#18181b] px-4 py-3 text-sm text-white shadow-2xl backdrop-blur transition-all">
-          <Check className="h-4 w-4 text-emerald-400" />
-          <span>{toastMessage}</span>
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-emerald-200 bg-white/95 px-5 py-3.5 text-sm text-slate-900 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out animate-bounce">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+          <span className="font-medium">{toastMessage}</span>
         </div>
       )}
 
       {/* Navigation Header */}
-      <header className="sticky top-0 z-40 w-full border-b border-[rgba(255,255,255,0.08)] bg-[#09090b]/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-md shadow-xs transition-all duration-300">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <a href="#" className="flex items-center gap-2.5 font-mono text-sm tracking-tight text-white group">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md border border-[rgba(255,255,255,0.12)] bg-zinc-900 group-hover:border-blue-500/50 transition">
-              <Code2 className="h-4 w-4 text-blue-400" />
+          <a href="#" className="flex items-center gap-2.5 font-mono text-sm tracking-tight text-slate-900 group">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white shadow-xs group-hover:border-blue-500/40 group-hover:shadow-sm transition-all duration-300">
+              <Code2 className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
             </span>
-            <span className="font-semibold tracking-normal">{CONTACT_DATA.name}</span>
-            <span className="text-xs text-zinc-500">/dev</span>
+            <span className="font-bold tracking-normal">{CONTACT_DATA.name}</span>
+            <span className="text-xs text-slate-400">/dev</span>
           </a>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-mono uppercase tracking-wider text-zinc-400">
-            <a href="#projects" className="hover:text-white transition">Live Works</a>
-            <a href="#sandbox" className="hover:text-white transition">Economics Engine</a>
-            <a href="#skills" className="hover:text-white transition">Stack</a>
-            <a href="#contact" className="hover:text-white transition">Contact</a>
+          <nav className="hidden md:flex items-center gap-7 text-xs font-mono uppercase tracking-wider text-slate-500">
+            <a href="#projects" className="hover:text-blue-600 transition-colors duration-200 font-medium">Live Works</a>
+            <a href="#sandbox" className="hover:text-blue-600 transition-colors duration-200 font-medium">Economics Engine</a>
+            <a href="#skills" className="hover:text-blue-600 transition-colors duration-200 font-medium">Stack</a>
+            <a href="#contact" className="hover:text-blue-600 transition-colors duration-200 font-medium">Contact</a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -275,7 +277,7 @@ export default function PortfolioPage() {
               href={CONTACT_DATA.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-950/20 px-3 py-1.5 font-mono text-xs font-medium text-emerald-400 hover:bg-emerald-900/30 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-3.5 py-1.5 font-mono text-xs font-semibold text-emerald-700 hover:bg-emerald-100 hover:border-emerald-400 hover:shadow-xs active:scale-95 transition-all duration-200"
             >
               <MessageSquare className="h-3.5 w-3.5" />
               <span>WhatsApp</span>
@@ -284,10 +286,10 @@ export default function PortfolioPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-12 md:py-20">
+      <main className="mx-auto max-w-6xl px-6 py-12 md:py-20 space-y-20">
         {/* ================= HERO SECTION ================= */}
-        <section className="relative pb-16 md:pb-24">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-950/20 px-3 py-1 text-xs font-mono text-emerald-400 mb-6">
+        <section className="relative">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3.5 py-1 text-xs font-mono text-emerald-800 mb-6 shadow-xs">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
@@ -296,21 +298,21 @@ export default function PortfolioPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
-                Full-Stack Engineer building <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">verified production software</span> & tools.
+            <div className="lg:col-span-7 space-y-6">
+              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+                Full-Stack Engineer building <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600">verified production software</span> & tools.
               </h1>
-              <p className="text-base md:text-lg text-zinc-400 leading-relaxed max-w-2xl mb-8">
-                I am <span className="text-white font-medium">{CONTACT_DATA.name}</span>. I build production-grade web applications, client-side spreadsheet reconciliation engines, logistics comparative tools, and AI-powered operational software.
+              <p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                I am <span className="text-slate-900 font-semibold">{CONTACT_DATA.name}</span>. I build production-grade web applications, client-side spreadsheet reconciliation engines, logistics comparative tools, and AI-powered operational software.
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href={CONTACT_DATA.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500 transition"
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 active:scale-95 transition-all duration-200"
                 >
                   <MessageSquare className="h-4 w-4" />
                   <span>Start WhatsApp Chat</span>
@@ -318,15 +320,15 @@ export default function PortfolioPage() {
 
                 <button
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-2 rounded-md border border-[rgba(255,255,255,0.1)] bg-zinc-900 px-4 py-2.5 text-sm font-mono text-zinc-300 hover:border-zinc-700 hover:text-white transition"
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-mono text-slate-700 shadow-xs hover:border-slate-400 hover:bg-slate-50 active:scale-95 transition-all duration-200"
                 >
-                  {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-zinc-400" />}
+                  {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                   <span>{copied ? 'Copied Email' : 'Copy Email'}</span>
                 </button>
 
                 <a
                   href="#projects"
-                  className="inline-flex items-center gap-1.5 rounded-md px-4 py-2.5 text-sm text-zinc-400 hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-white/60 transition-all duration-200"
                 >
                   <span>Explore Live Projects</span>
                   <ArrowUpRight className="h-4 w-4" />
@@ -334,39 +336,39 @@ export default function PortfolioPage() {
               </div>
             </div>
 
-            {/* Terminal Window */}
+            {/* Interactive Terminal in Sleek Modern Container */}
             <div className="lg:col-span-5">
-              <div className="overflow-hidden rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#0d1117] shadow-2xl font-mono text-xs">
-                <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.06)] bg-[#161b22] px-4 py-2.5">
+              <div className="overflow-hidden rounded-2xl border border-slate-800 bg-[#0f172a] shadow-xl hover:shadow-2xl transition-all duration-300 font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-slate-800 bg-[#1e293b] px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <div className="h-3 w-3 rounded-full bg-red-500/80"></div>
-                    <div className="h-3 w-3 rounded-full bg-yellow-500/80"></div>
-                    <div className="h-3 w-3 rounded-full bg-emerald-500/80"></div>
-                    <span className="ml-2 text-zinc-400 text-[11px]">yash@production:~</span>
+                    <div className="h-3 w-3 rounded-full bg-rose-500/90"></div>
+                    <div className="h-3 w-3 rounded-full bg-amber-500/90"></div>
+                    <div className="h-3 w-3 rounded-full bg-emerald-500/90"></div>
+                    <span className="ml-2 text-slate-400 text-[11px]">yash@production:~</span>
                   </div>
-                  <TerminalIcon className="h-3.5 w-3.5 text-zinc-500" />
+                  <TerminalIcon className="h-3.5 w-3.5 text-slate-400" />
                 </div>
 
-                <div className="p-4 h-64 overflow-y-auto space-y-3">
-                  <div className="text-zinc-500">// Type &apos;help&apos;, &apos;projects&apos;, or &apos;download-tool&apos;</div>
+                <div className="p-5 h-64 overflow-y-auto space-y-3.5 bg-slate-950/90 text-slate-200">
+                  <div className="text-slate-500">// Type &apos;help&apos;, &apos;projects&apos;, or &apos;download-tool&apos;</div>
                   {terminalLogs.map((log, index) => (
                     <div key={index} className="space-y-1">
-                      <div className="flex items-center gap-2 text-blue-400">
+                      <div className="flex items-center gap-2 text-blue-400 font-semibold">
                         <span className="text-emerald-400">λ</span>
                         <span>{log.cmd}</span>
                       </div>
-                      <div className="text-zinc-300 pl-4">{log.output}</div>
+                      <div className="text-slate-300 pl-4 leading-relaxed">{log.output}</div>
                     </div>
                   ))}
 
-                  <form onSubmit={handleTerminalSubmit} className="flex items-center gap-2 pt-1">
-                    <span className="text-emerald-400">λ</span>
+                  <form onSubmit={handleTerminalSubmit} className="flex items-center gap-2 pt-1 border-t border-slate-800/60">
+                    <span className="text-emerald-400 font-bold">λ</span>
                     <input
                       type="text"
                       value={terminalInput}
                       onChange={(e) => setTerminalInput(e.target.value)}
                       placeholder="Type a command..."
-                      className="w-full bg-transparent text-zinc-200 outline-none placeholder:text-zinc-600 font-mono"
+                      className="w-full bg-transparent text-slate-100 outline-none placeholder:text-slate-600 font-mono"
                     />
                   </form>
                 </div>
@@ -376,31 +378,31 @@ export default function PortfolioPage() {
         </section>
 
         {/* ================= PROJECT CASE STUDIES (4 BUILDS) ================= */}
-        <section id="projects" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <section id="projects" className="pt-8 border-t border-slate-200">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Production Deployments</span>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Live Applications & Case Studies</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-600 font-bold">Production Deployments</span>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">Live Applications & Case Studies</h2>
             </div>
-            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Direct proof of execution & interactive code</p>
+            <p className="text-sm text-slate-500 mt-2 md:mt-0 font-mono">Direct proof of execution & interactive code</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {CASE_STUDIES.map((project, idx) => (
               <div
                 key={idx}
-                className="group relative flex flex-col justify-between rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 md:p-8 hover:border-zinc-700 transition duration-300"
+                className="group relative flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xs hover:shadow-xl hover:border-blue-300/80 hover:-translate-y-1 transition-all duration-300 ease-out"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition">
+                  <div className="flex items-center justify-between mb-3 gap-2">
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors duration-200">
                       {project.title}
                     </h3>
 
                     {project.isDownloadable ? (
                       <button
                         onClick={handleDownloadFreightTool}
-                        className="inline-flex items-center gap-1.5 rounded bg-emerald-950/40 border border-emerald-500/40 px-2.5 py-1 text-xs font-mono text-emerald-400 hover:bg-emerald-900/60 hover:text-white transition"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 border border-emerald-300 px-3 py-1.5 text-xs font-mono font-semibold text-emerald-800 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-xs active:scale-95 transition-all duration-200"
                         title="Download Standalone HTML File"
                       >
                         <Download className="h-3.5 w-3.5" />
@@ -411,41 +413,41 @@ export default function PortfolioPage() {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded bg-zinc-900 border border-zinc-800 px-2 py-1 text-xs font-mono text-blue-400 hover:text-white hover:border-blue-500 transition"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 text-xs font-mono font-semibold text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 shadow-xs active:scale-95 transition-all duration-200"
                         title="Open Live App"
                       >
                         <span>Live App</span>
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-3.5 w-3.5" />
                       </a>
                     )}
                   </div>
 
-                  <p className="text-xs font-medium text-zinc-300 mb-4">{project.subtitle}</p>
+                  <p className="text-xs font-medium text-slate-500 mb-4">{project.subtitle}</p>
 
-                  <div className="space-y-3 mb-6 text-xs text-zinc-400">
-                    <div>
-                      <strong className="text-zinc-200 font-mono text-[11px] uppercase tracking-wider block mb-1">Problem Addressed:</strong>
+                  <div className="space-y-3 mb-6 text-xs text-slate-600">
+                    <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
+                      <strong className="text-slate-900 font-mono text-[11px] uppercase tracking-wider block mb-1">Problem Addressed:</strong>
                       <p className="leading-relaxed">{project.problem}</p>
                     </div>
-                    <div>
-                      <strong className="text-zinc-200 font-mono text-[11px] uppercase tracking-wider block mb-1">Architecture & Solution:</strong>
+                    <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
+                      <strong className="text-slate-900 font-mono text-[11px] uppercase tracking-wider block mb-1">Architecture & Solution:</strong>
                       <p className="leading-relaxed">{project.solution}</p>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-1.5 mb-6">
                     {project.metrics.map((metric, mIdx) => (
-                      <span key={mIdx} className="inline-flex items-center gap-1 rounded border border-emerald-500/20 bg-emerald-950/20 px-2.5 py-0.5 text-[11px] font-mono text-emerald-400">
-                        <Sparkles className="h-2.5 w-2.5" />
+                      <span key={mIdx} className="inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50/80 px-2.5 py-1 text-[11px] font-mono font-medium text-emerald-800">
+                        <Sparkles className="h-3 w-3 text-emerald-600" />
                         {metric}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-1 pt-4 border-t border-[rgba(255,255,255,0.06)]">
+                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-slate-100">
                   {project.stack.map((tech, tIdx) => (
-                    <span key={tIdx} className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-800">
+                    <span key={tIdx} className="rounded-md bg-slate-100 px-2.5 py-1 text-[10px] font-mono text-slate-600 border border-slate-200/80">
                       {tech}
                     </span>
                   ))}
@@ -456,23 +458,23 @@ export default function PortfolioPage() {
         </section>
 
         {/* ================= INTERACTIVE COMPONENT PLAYGROUND ================= */}
-        <section id="sandbox" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
+        <section id="sandbox" className="pt-8 border-t border-slate-200">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Interactive Logic Sandbox</span>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Real-Time Unit Economics Calculator</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-600 font-bold">Interactive Logic Sandbox</span>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">Real-Time Unit Economics Calculator</h2>
             </div>
-            <p className="text-sm text-zinc-400 mt-2 md:mt-0 font-mono">Live reactive module derived from BizNavigator</p>
+            <p className="text-sm text-slate-500 mt-2 md:mt-0 font-mono">Live reactive module derived from BizNavigator</p>
           </div>
 
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/70 p-6 md:p-8">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Controls */}
-              <div className="lg:col-span-6 space-y-5">
+              <div className="lg:col-span-6 space-y-6">
                 <div>
-                  <label className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
-                    <span className="flex items-center gap-1.5"><Sliders className="h-3.5 w-3.5 text-blue-400" /> Target Retail Price (₹)</span>
-                    <span className="text-white font-bold">₹{sellingPrice}</span>
+                  <label className="flex items-center justify-between text-xs font-mono text-slate-700 mb-2">
+                    <span className="flex items-center gap-1.5 font-medium"><Sliders className="h-3.5 w-3.5 text-blue-600" /> Target Retail Price (₹)</span>
+                    <span className="text-slate-900 font-bold text-sm bg-blue-50 px-2 py-0.5 rounded border border-blue-200">₹{sellingPrice}</span>
                   </label>
                   <input
                     type="range"
@@ -481,14 +483,14 @@ export default function PortfolioPage() {
                     step="50"
                     value={sellingPrice}
                     onChange={(e) => setSellingPrice(Number(e.target.value))}
-                    className="w-full accent-blue-500 cursor-pointer"
+                    className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-200 rounded-lg appearance-none"
                   />
                 </div>
 
                 <div>
-                  <label className="flex items-center justify-between text-xs font-mono text-zinc-300 mb-2">
-                    <span className="flex items-center gap-1.5"><Calculator className="h-3.5 w-3.5 text-blue-400" /> Landed Cost of Goods (COGS) (₹)</span>
-                    <span className="text-white font-bold">₹{productCost}</span>
+                  <label className="flex items-center justify-between text-xs font-mono text-slate-700 mb-2">
+                    <span className="flex items-center gap-1.5 font-medium"><Calculator className="h-3.5 w-3.5 text-blue-600" /> Landed Cost of Goods (COGS) (₹)</span>
+                    <span className="text-slate-900 font-bold text-sm bg-slate-100 px-2 py-0.5 rounded border border-slate-200">₹{productCost}</span>
                   </label>
                   <input
                     type="range"
@@ -497,62 +499,62 @@ export default function PortfolioPage() {
                     step="25"
                     value={productCost}
                     onChange={(e) => setProductCost(Number(e.target.value))}
-                    className="w-full accent-blue-500 cursor-pointer"
+                    className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-200 rounded-lg appearance-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono text-zinc-400 mb-1.5">Shipping / Delivery (₹)</label>
+                    <label className="block text-xs font-mono text-slate-600 mb-1.5 font-medium">Shipping / Delivery (₹)</label>
                     <input
                       type="number"
                       value={shippingFee}
                       onChange={(e) => setShippingFee(Number(e.target.value))}
-                      className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3 py-2 text-sm text-white font-mono focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-800 font-mono shadow-2xs focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all duration-200"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono text-zinc-400 mb-1.5">Payment Gateway Fee (%)</label>
+                    <label className="block text-xs font-mono text-slate-600 mb-1.5 font-medium">Payment Gateway Fee (%)</label>
                     <input
                       type="number"
                       value={gatewayCutPercent}
                       onChange={(e) => setGatewayCutPercent(Number(e.target.value))}
-                      className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3 py-2 text-sm text-white font-mono focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-800 font-mono shadow-2xs focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Real-time Calculation Panel */}
-              <div className="lg:col-span-6 flex flex-col justify-between rounded-lg border border-zinc-800 bg-[#0d1117] p-6 font-mono">
+              <div className="lg:col-span-6 flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-6 font-mono shadow-xs">
                 <div>
-                  <div className="flex items-center justify-between pb-3 border-b border-zinc-800/80 mb-4 text-xs">
-                    <span className="text-zinc-400">Contribution Margin Health</span>
-                    <span className={`px-2 py-0.5 rounded text-xs ${Number(calculations.netProfit) >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-200 mb-4 text-xs">
+                    <span className="text-slate-500 font-medium">Contribution Margin Health</span>
+                    <span className={`px-2.5 py-1 rounded-md text-xs font-bold ${Number(calculations.netProfit) >= 0 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}`}>
                       {Number(calculations.netProfit) >= 0 ? 'NET POSITIVE' : 'DEFICIT MARGIN'}
                     </span>
                   </div>
 
                   <div className="space-y-3 text-xs mb-6">
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-slate-600">
                       <span>Gateway Surcharge (Razorpay/Cards):</span>
-                      <span className="text-zinc-200">₹{calculations.gatewayFee}</span>
+                      <span className="text-slate-900 font-semibold">₹{calculations.gatewayFee}</span>
                     </div>
-                    <div className="flex justify-between text-zinc-400">
+                    <div className="flex justify-between text-slate-600">
                       <span>Combined Realized Overhead:</span>
-                      <span className="text-zinc-200">₹{calculations.totalExpenses}</span>
+                      <span className="text-slate-900 font-semibold">₹{calculations.totalExpenses}</span>
                     </div>
-                    <div className="flex justify-between text-zinc-400 pt-2 border-t border-zinc-800">
-                      <span>Net Contribution Per Order:</span>
-                      <span className={`text-sm font-bold ${Number(calculations.netProfit) >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <div className="flex justify-between text-slate-700 pt-3 border-t border-slate-200">
+                      <span className="font-semibold">Net Contribution Per Order:</span>
+                      <span className={`text-base font-bold ${Number(calculations.netProfit) >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
                         ₹{calculations.netProfit} ({calculations.profitMargin}%)
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded bg-black/60 p-3 text-[11px] space-y-1 text-zinc-300 border border-zinc-800/80">
-                  <div className="flex items-center gap-1.5 text-blue-400 mb-1">
+                <div className="rounded-lg bg-white p-3 text-[11px] space-y-1 text-slate-600 border border-slate-200/80 shadow-2xs">
+                  <div className="flex items-center gap-1.5 text-blue-600 mb-1">
                     <TrendingUp className="h-3.5 w-3.5" />
                     <span className="font-semibold">BizNavigator Financial Engine</span>
                   </div>
@@ -564,28 +566,28 @@ export default function PortfolioPage() {
         </section>
 
         {/* ================= SKILLS MATRIX ================= */}
-        <section id="skills" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
-          <div className="mb-12">
-            <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Domain Proficiency</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">Technical Stack & Capabilities</h2>
+        <section id="skills" className="pt-8 border-t border-slate-200">
+          <div className="mb-10">
+            <span className="text-xs font-mono uppercase tracking-widest text-blue-600 font-bold">Domain Proficiency</span>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">Technical Stack & Capabilities</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SKILLS.map((domain, idx) => {
               const Icon = domain.icon;
               return (
-                <div key={idx} className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/40 p-6">
+                <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-300">
                   <div className="flex items-center gap-3 mb-5">
-                    <span className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                    <span className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-600">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <h3 className="font-semibold text-white text-base">{domain.category}</h3>
+                    <h3 className="font-bold text-slate-900 text-base">{domain.category}</h3>
                   </div>
 
                   <ul className="space-y-2.5">
                     {domain.items.map((skill, sIdx) => (
-                      <li key={sIdx} className="flex items-center gap-2 text-xs font-mono text-zinc-300">
-                        <Cpu className="h-3 w-3 text-blue-400/70" />
+                      <li key={sIdx} className="flex items-center gap-2 text-xs font-mono text-slate-700">
+                        <Cpu className="h-3 w-3 text-blue-500" />
                         <span>{skill}</span>
                       </li>
                     ))}
@@ -597,27 +599,29 @@ export default function PortfolioPage() {
         </section>
 
         {/* ================= CONTACT SECTION & FOOTER ================= */}
-        <section id="contact" className="py-16 border-t border-[rgba(255,255,255,0.08)]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-5">
-              <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Initiate Collaboration</span>
-              <h2 className="text-3xl font-bold text-white mt-1 mb-4">Let&apos;s build production software.</h2>
-              <p className="text-sm text-zinc-400 leading-relaxed mb-6">
-                Whether you need a custom web application built, AI workflows embedded, or automated logistics & spreadsheet reconciliation systems, contact me directly.
-              </p>
+        <section id="contact" className="pt-8 border-t border-slate-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="lg:col-span-5 space-y-6">
+              <div>
+                <span className="text-xs font-mono uppercase tracking-widest text-blue-600 font-bold">Initiate Collaboration</span>
+                <h2 className="text-3xl font-extrabold text-slate-900 mt-1 mb-4">Let&apos;s build production software.</h2>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Whether you need a custom web application built, AI workflows embedded, or automated logistics & spreadsheet reconciliation systems, contact me directly.
+                </p>
+              </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3.5 rounded-lg border border-[rgba(255,255,255,0.08)] bg-zinc-900/50">
+              <div className="space-y-3.5">
+                <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-white shadow-xs">
                   <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-zinc-400" />
-                    <span className="text-xs font-mono text-zinc-200">{CONTACT_DATA.email}</span>
+                    <Mail className="h-4 w-4 text-slate-500" />
+                    <span className="text-xs font-mono text-slate-900 font-medium">{CONTACT_DATA.email}</span>
                   </div>
                   <button
                     onClick={handleCopyEmail}
-                    className="p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition"
+                    className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors duration-200"
                     title="Copy Email"
                   >
-                    {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-zinc-400" />}
+                    {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
 
@@ -625,13 +629,13 @@ export default function PortfolioPage() {
                   href={CONTACT_DATA.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-lg border border-emerald-500/20 bg-emerald-950/20 text-emerald-400 hover:bg-emerald-950/30 transition group"
+                  className="flex items-center justify-between p-4 rounded-xl border border-emerald-300 bg-emerald-50/70 text-emerald-900 hover:bg-emerald-100 shadow-xs active:scale-98 transition-all duration-200 group"
                 >
                   <div className="flex items-center gap-3">
-                    <MessageSquare className="h-4 w-4 text-emerald-400" />
-                    <span className="text-xs font-mono font-medium">Chat via WhatsApp ({CONTACT_DATA.phoneFormatted})</span>
+                    <MessageSquare className="h-4 w-4 text-emerald-600" />
+                    <span className="text-xs font-mono font-bold">Chat via WhatsApp ({CONTACT_DATA.phoneFormatted})</span>
                   </div>
-                  <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
+                  <ArrowUpRight className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                 </a>
               </div>
             </div>
@@ -643,50 +647,50 @@ export default function PortfolioPage() {
                   e.preventDefault();
                   alert('Thank you! Yash Chaudhary will review your message promptly.');
                 }}
-                className="space-y-4 rounded-xl border border-[rgba(255,255,255,0.08)] bg-zinc-950/60 p-6 md:p-8"
+                className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-xs"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-medium">
                       Your Name / Org
                     </label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Ramesh Sharma"
-                      className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xs focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all duration-200"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                    <label className="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-medium">
                       Email or WhatsApp
                     </label>
                     <input
                       type="text"
                       required
                       placeholder="alex@company.com"
-                      className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xs focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-600 mb-1.5 font-medium">
                     Project Scope / Requirements
                   </label>
                   <textarea
                     rows={4}
                     required
                     placeholder="Describe what you would like to build or automate..."
-                    className="w-full rounded-md border border-[rgba(255,255,255,0.08)] bg-zinc-900/60 px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none resize-none"
+                    className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xs focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:outline-none resize-none transition-all duration-200"
                   ></textarea>
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs font-mono text-zinc-500">Typical response time: &lt; 2 hours</span>
+                  <span className="text-xs font-mono text-slate-500">Typical response time: &lt; 2 hours</span>
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-md hover:bg-blue-500 transition"
+                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 active:scale-95 transition-all duration-200"
                   >
                     <Send className="h-4 w-4" />
                     <span>Send Message</span>
@@ -696,12 +700,12 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          <footer className="mt-16 pt-8 border-t border-[rgba(255,255,255,0.06)] flex flex-col md:flex-row items-center justify-between text-xs font-mono text-zinc-500 gap-4">
+          <footer className="mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between text-xs font-mono text-slate-500 gap-4">
             <p>© {new Date().getFullYear()} Yash Chaudhary. All rights reserved.</p>
-            <div className="flex items-center gap-6">
-              <a href={CONTACT_DATA.whatsappUrl} className="hover:text-zinc-300 transition">WhatsApp Direct</a>
-              <a href={`mailto:${CONTACT_DATA.email}`} className="hover:text-zinc-300 transition">Direct Email</a>
-              <a href="#projects" className="hover:text-zinc-300 transition">Live Applications</a>
+            <div className="flex items-center gap-6 font-medium">
+              <a href={CONTACT_DATA.whatsappUrl} className="hover:text-emerald-700 transition-colors duration-200">WhatsApp Direct</a>
+              <a href={`mailto:${CONTACT_DATA.email}`} className="hover:text-blue-600 transition-colors duration-200">Direct Email</a>
+              <a href="#projects" className="hover:text-slate-800 transition-colors duration-200">Live Applications</a>
             </div>
           </footer>
         </section>
